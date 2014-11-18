@@ -24,7 +24,7 @@ while display.isNotDone():
 	img = cam.getImage().flipHorizontal()
 	masked = img.getSkintoneMask()
 
-	hands = masked.findHaarFeatures(hand_xml_c)
+	hands = masked.findHaarFeatures(hand_xml_d)
 
 	circe_layer = SimpleCV.DrawingLayer((img.width, img.height))
 	percent = 0
