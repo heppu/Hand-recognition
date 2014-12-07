@@ -7,14 +7,12 @@ To use script you need to install [SimpleCV](https://github.com/sightmachine/sim
 
 Settings
 --------
-WEBCAM = True
 
+**WEBCAM=True**
 If WEBCAM is set to True script will read images from webcam strem.
 
-URL = "http://localhost:2700/drone"
-
+**URL=""**
 If WEBCAM is set to False and URL is defined script will get images from url.
 
-WATCH = True
-
+**WATCH=True**
 If WATCH is set to True you will see image and blue circle around hand if one is found.
