@@ -1,18 +1,24 @@
 import sys
+import time
 import SimpleCV
 import datetime
 import urllib2
+import requests
 import StringIO
 from PIL import Image
+from httplib import BadStatusLine
 
 # Change WEBCAM to True if you want to read images from webcam
-WEBCAM = True
+WEBCAM = False
 
 # If webcam is False define URL where images are fetched
-URL = ""
+URL = "http://localhost:2700/drone"
 
 # Change to True if you want to see images
 WATCH = True
+
+# Post url
+POST_URL = "http://localhost:2700/coordinates"
 
 if(WEBCAM==False and len(URL)==0):
 	print "Use webcam or define url"
@@ -24,6 +30,15 @@ hand_xml_b = SimpleCV.HaarCascade("xml/handb.xml") 	# hand fingers left to right
 hand_xml_c = SimpleCV.HaarCascade("xml/hands.xml") 	# hand fingers left to right
 
 i=0
+
+def sendData(x, y, area):
+	params = dict(xin=x, yin=y, area=area)
+	try:
+		r = requests.get(POST_URL, params=params, allow_redirects=True)
+		print r.content
+	except ConnectionError, e:
+		print e
+
 
 def analyze(img, i):
 	start = datetime.datetime.now()
@@ -80,7 +95,8 @@ def analyze(img, i):
 	 		img.addDrawingLayer(circe_layer)
 	 		img.applyLayers()
 
-		print x_out, y_out, percent	
+		print x_out, y_out, percent
+		sendData(x_out, y_out, percent)
 
  	time =  (datetime.datetime.now() - start).total_seconds() * 1000
  	print "Image analyzed in %sms" % (time)
@@ -129,17 +145,25 @@ else:
 			if display.mouseRight:
 				normaldisplay = not(normaldisplay)
 			# Read imger from url
-			im = urllib2.urlopen(URL).read()
-			img = Image.open(StringIO.StringIO(im))
-			img = SimpleCV.Image(img)
-			#analyze image
-			i = analyze(img, i)
+			try:
+				im = urllib2.urlopen(URL).read()
+				img = Image.open(StringIO.StringIO(im))
+				img = SimpleCV.Image(img)
+				#analyze image
+				i = analyze(img, i)
+			except (urllib2.URLError, BadStatusLine) as e:
+				print "error"
+				time.sleep(5)
 
 	else:
 		while True:
 			# Read imger from url
-			im = urllib2.urlopen(URL).read()
-			img = Image.open(StringIO.StringIO(im))
-			img = SimpleCV.Image(img)
-			#analyze image
-			i = analyze(img, i)
+			try:
+				im = urllib2.urlopen(URL).read()
+				img = Image.open(StringIO.StringIO(im))
+				img = SimpleCV.Image(img)
+				#analyze image
+				i = analyze(img, i)
+			except (urllib2.URLError, BadStatusLine) as e:
+				print "error"
+				time.sleep(5)
