@@ -4,6 +4,10 @@ Hand-recognition
 Hand recognition is a python script that detects hand from image and calculates its coordinates and area.
 To use script you need to install [SimpleCV](https://github.com/sightmachine/simplecv).
 
+Use case
+--------
+
+This script was made to read images from AR.Drone 2.0 and send values to control it movements by your hand.
 
 Settings
 --------
