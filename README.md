@@ -13,7 +13,7 @@ Settings
 --------
 
 **WEBCAM=True**
-If WEBCAM is set to True script will read images from webcam strem.
+If WEBCAM is set to True script will read images from webcam stream.
 
 **URL=""**
 If WEBCAM is set to False and URL is defined script will get images from url.
